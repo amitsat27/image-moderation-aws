@@ -1,0 +1,28 @@
+
+
+.mat-drawer-content {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  overflow: auto;
+  background-color: white;
+}
+.sidenav-container {
+  height: 100%;
+}
+
+.mat-drawer-inner-container {
+  background-color:  white;
+}
+.sidenav {
+  width: 200px;
+}
+
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: rgb(39, 84, 182);
+}

@@ -1,0 +1,33 @@
+.grid-container {
+  margin: 20px;
+}
+
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  background-color: rgb(250, 237, 237);
+  color: black;
+}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
+}
+
+.mat-icon {
+  color: black;
+}
+.mat-card-title{
+  color: black;
+}
+.property{
+  color: black;
+}
