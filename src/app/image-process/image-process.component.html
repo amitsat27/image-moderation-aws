@@ -81,7 +81,7 @@
     
   </mat-grid-list>
   <mat-grid-list cols="2" rowHeight="700px" rowWidth="200px">
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <!-- <mat-grid-tile [colspan]="1" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
@@ -99,25 +99,57 @@
           <div>Card Content Here</div>
         </mat-card-content>
       </mat-card>
-    </mat-grid-tile>
+    </mat-grid-tile> -->
     <mat-grid-tile [colspan]="1" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-             Processed Image 
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
+            <span class="property">Image Upload</span>
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu1" aria-label="Toggle menu">
+              <mat-icon>upload_file</mat-icon>
             </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
+            <mat-menu #menu1="matMenu" xPosition="before">
+              <button mat-menu-item (click)="uploadImage()">Upload Image</button>
             </mat-menu>
           </mat-card-title>
         </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
+        <mat-card-content class="dashboard-card-content-image">
+          <div style="margin-top: 30px;" *ngIf="imageUrl; else noImage" class="image-container">
+            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image"/>
+            <div class="button-container">
+              <button mat-raised-button class="process-button" (click)="processImage()" style="background-color: skyblue; color: white;">
+                Process Image
+              </button>
+            </div>
+          </div>
+          <ng-template #noImage>
+            <div>No image uploaded.</div>
+          </ng-template>
         </mat-card-content>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display:none;" #fileInput>
       </mat-card>
     </mat-grid-tile>
+    
+    
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            <span class="property">Processed Image</span>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content-image">
+          <div style="margin-top: 30px;" *ngIf="imageUrl; else noImageProcessed" class="image-container">
+            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image"/>
+            
+          </div>
+          <ng-template #noImageProcessed>
+            <div>No image processed.</div>
+          </ng-template>
+        </mat-card-content>
+        
+      </mat-card>
+    </mat-grid-tile>
+    
   </mat-grid-list>
 </div>

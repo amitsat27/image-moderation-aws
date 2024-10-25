@@ -31,3 +31,44 @@
 .property{
   color: black;
 }
+.dashboard-card-content-image {
+  position: relative;  /* Make it a positioning context */
+  overflow: hidden;    /* Hide any overflow */
+  height: 100%;        /* Allow the content to take full height */
+}
+
+.image-container {
+  width: 100%;
+  height: 98%;        /* Fill the card content */
+  position: relative;
+  
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px; /* Adjust margin as needed */
+}
+
+
+.uploaded-image {
+  margin-top: 2px;
+  width: 100%;         /* Full width */
+  height: 95%;        /* Full height */
+  object-fit: cover;   /* Scale the image while preserving aspect ratio */
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.process-button {
+  position: absolute;
+  top: 10px; /* Adjust as needed */
+  left: 50%;
+  transform: translate(-50%, 1300%);
+  background-color: skyblue;
+  color: white;
+  z-index: 10; /* Ensure it appears above the image */
+}
