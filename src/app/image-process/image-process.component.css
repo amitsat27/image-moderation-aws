@@ -19,7 +19,7 @@
 }
 
 .dashboard-card-content {
-  text-align: center;
+  white-space: pre-wrap; /* Preserve whitespace and wrap text */
 }
 
 .mat-icon {
@@ -71,4 +71,31 @@
   background-color: skyblue;
   color: white;
   z-index: 10; /* Ensure it appears above the image */
+}
+
+.blurred {
+  filter: blur(8px);
+}
+
+.green-snackbar {
+  background-color: green;
+  color: white;
+}
+
+.red-snackbar {
+  background-color: red;
+  color: white;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }

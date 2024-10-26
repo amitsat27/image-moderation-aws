@@ -1,105 +1,24 @@
-<div class="grid-container" >
-  
-  <mat-grid-list cols="4" rowHeight="200px" rowWidth="200px">
-      <mat-grid-tile [colspan]="1" [rowspan]="1">
+<div class="grid-container">
+  <ng-container *ngIf="moderationLabels.length > 0">
+    <mat-grid-list cols="4" rowHeight="200px" rowWidth="200px">
+      <mat-grid-tile [colspan]="1" [rowspan]="1" *ngFor="let label of getFilteredLabels(); let i = index">
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-               <span class="property">Property 1 </span>
-              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon >more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu>
+              <span class="property">Moderation Label {{ i + 1 }}</span>
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
-            <div>Card Content Here</div>
+            <div>Confidence - {{ label?.Confidence }}</div>
+            <br>
+            <div>Parent Name - {{ label?.ParentName }}</div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
-      <mat-grid-tile [colspan]="1" [rowspan]="1">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Property 2
-              <button   mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon style="color: black;">more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <div>Card Content Here</div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="1" [rowspan]="1">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Property 3
-              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <div>Card Content Here</div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-      <mat-grid-tile [colspan]="1" [rowspan]="1">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Property 4
-              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <div>Card Content Here</div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-      
-    
-  </mat-grid-list>
+    </mat-grid-list>
+  </ng-container>
+
   <mat-grid-list cols="2" rowHeight="700px" rowWidth="200px">
-    <!-- <mat-grid-tile [colspan]="1" [rowspan]="1">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-             Image Upload 
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile> -->
     <mat-grid-tile [colspan]="1" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
@@ -117,20 +36,15 @@
           <div style="margin-top: 30px;" *ngIf="imageUrl; else noImage" class="image-container">
             <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image"/>
             <div class="button-container">
-              <button mat-raised-button class="process-button" (click)="processImage()" style="background-color: skyblue; color: white;">
-                Process Image
-              </button>
             </div>
           </div>
           <ng-template #noImage>
             <div>No image uploaded.</div>
           </ng-template>
         </mat-card-content>
-        <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display:none;" #fileInput>
+        <input type="file" accept="image/jpeg, image/png" (change)="onFileSelected($event)" style="display:none;" #fileInput>
       </mat-card>
     </mat-grid-tile>
-    
-    
     <mat-grid-tile [colspan]="1" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
@@ -139,17 +53,19 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content-image">
-          <div style="margin-top: 30px;" *ngIf="imageUrl; else noImageProcessed" class="image-container">
-            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image"/>
-            
+          <div style="margin-top: 30px;" *ngIf="isProcessingComplete && imageUrl; else noImageProcessed" class="image-container">
+            <img [src]="imageUrl" [class.blurred]="!isImageSafe" alt="Uploaded Image" class="uploaded-image"/>
           </div>
           <ng-template #noImageProcessed>
-            <div>No image processed.</div>
+            <div><br>No image processed.</div>
           </ng-template>
         </mat-card-content>
-        
       </mat-card>
     </mat-grid-tile>
-    
   </mat-grid-list>
+
+  <div *ngIf="isLoading" class="loader-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+
 </div>

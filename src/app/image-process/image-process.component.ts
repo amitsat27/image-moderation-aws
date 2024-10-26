@@ -1,12 +1,16 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { HttpClient , HttpClientModule} from '@angular/common/http';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-image-process',
@@ -20,28 +24,103 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatButtonModule,
     CommonModule,
-    MatCardModule
+    MatCardModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ]
 })
 export class ImageProcessComponent {
   private breakpointObserver = inject(BreakpointObserver);
+  private http = inject(HttpClient); 
+  private snackBar = inject(MatSnackBar); 
+
   imageUrl: string | ArrayBuffer | null | undefined="";
+  base64Image: string | null = null;
+  isImageSafe: boolean = true;
+  fileName: string | null = null; 
+  moderationLabels: any[] = [];
+  isProcessingComplete: boolean = false;
+  isLoading: boolean = false;
+
+  property1: any = null;
+  property2: any = null;
+  property3: any = null;
+  property4: any = null;
+
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   uploadImage() {
-    this.fileInput.nativeElement.click(); // Trigger the hidden 
+    this.fileInput.nativeElement.click();
   }
-  processImage(){}
+
+  showToaster(message: string, panelClass: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: [panelClass]
+    });
+  }
 
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+      
       const reader = new FileReader();
+      this.fileName = file.name;
+
       reader.onload = (e) => {
-        this.imageUrl = e.target?.result; // Set the image URL for display
+        const result = e.target?.result as string;
+        this.imageUrl = result; 
+        this.base64Image = result.split(',')[1];
+
+        this.isProcessingComplete = false;
+        this.isLoading = true;
+        this.showToaster('Processing image...', 'green-snackbar');
+
+        const apiUrl = 'https://tahekxieo5.execute-api.ap-south-1.amazonaws.com/dev/imageAnalysis'; 
+        const body = { imageBase64: this.base64Image, fileName: this.fileName };
+
+        this.http.post(apiUrl, body).pipe(
+          tap((response: any) => {
+            console.log('Image uploaded successfully', response);
+            this.moderationLabels = response.moderationInfo;
+
+            if (!this.moderationLabels || this.moderationLabels.length === 0) {
+              this.isImageSafe = true;
+            } else {
+              const totalConfidence = this.moderationLabels.reduce((sum, label) => sum + label.Confidence, 0);
+              const averageConfidence = totalConfidence / this.moderationLabels.length;
+              this.isImageSafe = averageConfidence <= 90;
+            }
+
+            if(this.isImageSafe) {
+              this.property1 = this.moderationLabels[0] || null;
+              this.property2 = this.moderationLabels[1] || null;
+              this.property3 = this.moderationLabels[2] || null;
+              this.property4 = this.moderationLabels[3] || null;
+            }
+
+            this.isProcessingComplete = true;
+            this.isLoading = false;
+
+            this.showToaster(this.isImageSafe ? 'Image is Safe' : 'Image is Unsafe', this.isImageSafe ? 'green-snackbar' : 'red-snackbar');
+          }),
+          catchError(error => {
+            console.error('Error uploading image', error);
+            this.isLoading = false;
+            this.showToaster(error, 'green-snackbar');
+            return of(null); 
+          })
+        ).subscribe();
       };
-      reader.readAsDataURL(file); // Convert the file to a data URL
+      reader.readAsDataURL(file);
+    } else {
+      alert('Please select a valid image file (JPG or PNG).');
     }
+  }
+
+  getFilteredLabels() {
+    return this.moderationLabels.filter(label => label?.ParentName).slice(0, 4);
   }
 
   /** Based on the screen size, switch from standard to one column per row */
