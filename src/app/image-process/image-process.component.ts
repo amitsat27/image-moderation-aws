@@ -43,11 +43,6 @@ export class ImageProcessComponent {
   isProcessingComplete: boolean = false;
   isLoading: boolean = false;
 
-  property1: any = null;
-  property2: any = null;
-  property3: any = null;
-  property4: any = null;
-
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   uploadImage() {
@@ -91,13 +86,6 @@ export class ImageProcessComponent {
               const totalConfidence = this.moderationLabels.reduce((sum, label) => sum + label.Confidence, 0);
               const averageConfidence = totalConfidence / this.moderationLabels.length;
               this.isImageSafe = averageConfidence <= 90;
-            }
-
-            if(this.isImageSafe) {
-              this.property1 = this.moderationLabels[0] || null;
-              this.property2 = this.moderationLabels[1] || null;
-              this.property3 = this.moderationLabels[2] || null;
-              this.property4 = this.moderationLabels[3] || null;
             }
 
             this.isProcessingComplete = true;
