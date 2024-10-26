@@ -1,7 +1,17 @@
 .grid-container {
   margin: 20px;
 }
+.spinner-primary {
+  --mdc-circular-progress-active-indicator-color: #4caf50; /* Green */
+}
 
+.spinner-warn {
+  --mdc-circular-progress-active-indicator-color: #ff9800; /* Orange */
+}
+
+.spinner-accent {
+  --mdc-circular-progress-active-indicator-color: #f44336; /* Red */
+}
 .dashboard-card {
   position: absolute;
   top: 15px;
@@ -18,10 +28,6 @@
   right: 10px;
 }
 
-.dashboard-card-content {
-  white-space: pre-wrap; /* Preserve whitespace and wrap text */
-}
-
 .mat-icon {
   color: black;
 }
@@ -30,6 +36,7 @@
 }
 .property{
   color: black;
+  font-size: medium;
 }
 .dashboard-card-content-image {
   position: relative;  /* Make it a positioning context */
@@ -60,7 +67,6 @@
   display: flex;
   flex-direction: column;
 }
-
 
 
 .process-button {
@@ -98,4 +104,36 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+.dashboard-card-content {
+  display: flex;
+  align-items: center; /* Vertically center items */
+  margin-top: 20px;
+}
+
+
+
+.content-right {
+  flex-grow: 1; /* Allows the content area to take up the remaining space */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns text to the left */
+}
+
+.confidence-text {
+  text-align: left; /* Aligns text to the left */
+}
+
+.spinner-container {
+  position: relative; /* Make this the reference for absolute positioning */
+  margin-right: 16px; /* Space between spinner and content */
+}
+
+.percentage-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -48%);
+  font-weight: bold;
+  color: rgb(110, 95, 95); /* Optional: change color for better visibility */
 }

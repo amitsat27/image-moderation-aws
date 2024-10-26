@@ -31,6 +31,7 @@ import { of } from 'rxjs';
   ]
 })
 export class ImageProcessComponent {
+  
   private breakpointObserver = inject(BreakpointObserver);
   private http = inject(HttpClient); 
   private snackBar = inject(MatSnackBar); 
@@ -109,6 +110,15 @@ export class ImageProcessComponent {
 
   getFilteredLabels() {
     return this.moderationLabels.filter(label => label?.ParentName).slice(0, 4);
+  }
+  getSpinnerClass(confidence: number): string {
+    if (confidence <= 25) {
+      return 'spinner-primary'; // Define this class for low confidence
+    } else if (confidence <= 50) {
+      return 'spinner-warn'; // Define this class for medium confidence
+    } else {
+      return 'spinner-accent'; // Define this class for high confidence
+    }
   }
 
   /** Based on the screen size, switch from standard to one column per row */
