@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { catchError, map, tap } from 'rxjs/operators';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -49,6 +49,16 @@ export class ImageProcessComponent {
   uploadImage() {
     this.fileInput.nativeElement.click();
   }
+  cols: number = 4; // Default column count
+  colsImages: number = 2;
+
+  // Update column count based on window size
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.setColsLabels();
+    this.setColsImages();
+  }
+
 
   showToaster(message: string, panelClass: string) {
     this.snackBar.open(message, 'Close', {
@@ -108,6 +118,24 @@ export class ImageProcessComponent {
     }
   }
 
+  setColsLabels() {
+    const width = window.innerWidth;
+    if (width < 600) {
+      this.cols = 1; // 1 column for small screens
+    } else if (width < 960) {
+      this.cols = 2; // 2 columns for medium screens
+    } else {
+      this.cols = 4; // 4 columns for larger screens
+    }
+  }
+  setColsImages(){
+    const width = window.innerWidth;
+    if (width < 600) {
+      this.colsImages = 1; // 1 column for small screens
+    } else  {
+      this.colsImages = 2; // 2 columns for medium screens
+    } 
+  }
   getFilteredLabels() {
     return this.moderationLabels.filter(label => label?.ParentName).slice(0, 4);
   }

@@ -1,6 +1,6 @@
 <div class="grid-container">
   <ng-container *ngIf="moderationLabels.length > 0">
-    <mat-grid-list cols="4" rowHeight="200px">
+    <mat-grid-list [cols]="cols" rowHeight="200px">
       <mat-grid-tile [colspan]="1" [rowspan]="1" *ngFor="let label of getFilteredLabels(); let i = index">
         <mat-card class="dashboard-card">
           <mat-card-header>
