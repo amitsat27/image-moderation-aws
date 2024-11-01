@@ -12,6 +12,21 @@
 .spinner-accent {
   --mdc-circular-progress-active-indicator-color: #f44336; /* Red */
 }
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  background-color: rgb(250, 237, 237);
+  color: black;
+}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
 
 .mat-icon {
   color: black;
@@ -23,84 +38,51 @@
   color: black;
   font-size: medium;
 }
-
-/* Image Upload Content */
-.dashboard-card {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  background-color: rgb(250, 237, 237);
-  color: black;
-}
 .dashboard-card-content-image {
   position: relative;  /* Make it a positioning context */
   overflow: hidden;    /* Hide any overflow */
   height: 100%;        /* Allow the content to take full height */
 }
 
-.dashboard-card-content {
-  display: flex;
-  align-items: center; /* Vertically center items */
-  margin-top: 20px;
+.image-container {
+  width: 100%;
+  height: 98%;        /* Fill the card content */
+  position: relative;
+  
 }
 
-
-.percentage-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-40%, -48%);
-  font-weight: bold;
-  color: rgb(110, 95, 95); /* Optional: change color for better visibility */
-}
 .button-container {
   display: flex;
   justify-content: center;
   margin-top: 16px; /* Adjust margin as needed */
 }
 
+
 .uploaded-image {
   margin-top: 2px;
   width: 100%;         /* Full width */
-  height: 100%;        /* Full height */
+  height: 95%;        /* Full height */
   object-fit: cover;   /* Scale the image while preserving aspect ratio */
   border-radius: 18px;
   display: flex;
   flex-direction: column;
 }
-.image-container {
-  border: 2px dashed #ccc;
-  padding: 20px;
-  text-align: center;
-  min-height: 150px; /* Ensure enough height */
-  height: 90%;
-  position: relative;
-  box-sizing: border-box; /* Include padding in the total size */
-  width: 100%; /* Ensure it takes the full width of the card */
-  max-width: 100%; /* Prevents overflow */
-  overflow: hidden; /* Hides any overflow */
-}
 
-.drag-over {
-  border-color: #007bff;
-  background-color: #f0f8ff;
-}
 
-.upload-text {
-  color: #aaa; /* Faded text color */
-  font-size: 16px; /* Adjust font size as needed */
-  line-height: 150px; /* Center the text vertically */
-  height: 150px; /* Ensure the text is vertically centered */
+.process-button {
+  position: absolute;
+  top: 10px; /* Adjust as needed */
+  left: 50%;
+  transform: translate(-50%, 1300%);
+  background-color: skyblue;
+  color: white;
+  z-index: 10; /* Ensure it appears above the image */
 }
-
 
 .blurred {
   filter: blur(8px);
 }
 
-/* SnackBard Properties */
 .green-snackbar {
   background-color: green;
   color: white;
@@ -123,8 +105,14 @@
   align-items: center;
   z-index: 1000;
 }
+.dashboard-card-content {
+  display: flex;
+  align-items: center; /* Vertically center items */
+  margin-top: 20px;
+}
 
-/* Labels Content */
+
+
 .content-right {
   flex-grow: 1; /* Allows the content area to take up the remaining space */
   display: flex;
@@ -141,8 +129,15 @@
   margin-right: 16px; /* Space between spinner and content */
 }
 
+.percentage-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -48%);
+  font-weight: bold;
+  color: rgb(110, 95, 95); /* Optional: change color for better visibility */
+}
 
-/* Dynamic Columns */
 @media (max-width: 600px) {
   .mat-grid-list {
     grid-template-columns: repeat(1, 1fr) !important; /* 1 column for small screens */
