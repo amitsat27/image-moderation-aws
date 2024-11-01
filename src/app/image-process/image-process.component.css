@@ -1,96 +1,88 @@
-.grid-container {
-  margin: 20px;
-}
-.spinner-primary {
-  --mdc-circular-progress-active-indicator-color: #4caf50; /* Green */
-}
-
-.spinner-warn {
-  --mdc-circular-progress-active-indicator-color: #ff9800; /* Orange */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
 }
 
-.spinner-accent {
-  --mdc-circular-progress-active-indicator-color: #f44336; /* Red */
-}
-.dashboard-card {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  background-color: rgb(250, 237, 237);
-  color: black;
+.left-panel, .right-panel {
+  flex: 1;
+  margin: 10px;
+  min-width: 300px;
 }
 
-.more-button {
-  position: absolute;
-  top: 5px;
-  right: 10px;
+.upload-card, .processed-card {
+  background-color: #e0f7fa;
+  color: #006064;
+  height: 500px; /* Set equal height for both cards */
 }
 
-.mat-icon {
-  color: black;
+.upload-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.mat-card-title{
-  color: black;
+
+.upload-button {
+  background-color: #006064 !important;
+  color: #e0f7fa !important;
 }
-.property{
-  color: black;
-  font-size: medium;
+
+.card-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit; /* Inherit height from parent */
+  width: inherit; /* Inherit width from parent */
+  padding: 20px; /* Add padding */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  overflow: hidden; /* Ensure content does not overflow */
 }
-.dashboard-card-content-image {
-  position: relative;  /* Make it a positioning context */
-  overflow: hidden;    /* Hide any overflow */
-  height: 100%;        /* Allow the content to take full height */
+
+.mat-mdc-card-header {
+  height: 70px !important;
+  align-items: center;
 }
 
 .image-container {
-  width: 100%;
-  height: 98%;        /* Fill the card content */
-  position: relative;
-  
-}
-
-.button-container {
   display: flex;
   justify-content: center;
-  margin-top: 16px; /* Adjust margin as needed */
+  align-items: center;
+  height: 100%; /* Adjust height to fill the card content */
+  width: 100%; /* Adjust width to fill the card content */
 }
-
 
 .uploaded-image {
-  margin-top: 2px;
-  width: 100%;         /* Full width */
-  height: 95%;        /* Full height */
-  object-fit: cover;   /* Scale the image while preserving aspect ratio */
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-}
-
-
-.process-button {
-  position: absolute;
-  top: 10px; /* Adjust as needed */
-  left: 50%;
-  transform: translate(-50%, 1300%);
-  background-color: skyblue;
-  color: white;
-  z-index: 10; /* Ensure it appears above the image */
+  max-width: 100%; /* Ensure image does not exceed container width */
+  max-height: 100%; /* Ensure image does not exceed container height */
+  border-radius: 10px;
 }
 
 .blurred {
   filter: blur(8px);
 }
 
-.green-snackbar {
-  background-color: green;
-  color: white;
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%; /* Use full screen width */
 }
 
-.red-snackbar {
-  background-color: red;
-  color: white;
+.moderation-card {
+  margin: 10px;
+  flex: 1 1 calc(25% - 20px); /* Make cards responsive and adapt to screen size */
+  background-color: rgba(255, 99, 71, 0.5); /* Pastel red with 50% opacity */
+  color: #000000; /* Set text color for cards */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Set font family to Calibri */
+}
+
+.moderation-card .header {
+  font-weight: 300; /* Bold the "Moderation Label N" text */;
+}
+
+.moderation-card .key {
+  font-weight: 320; /* Bold the keys "Prediction Accuracy" and "Identified Category" */
 }
 
 .loader-overlay {
@@ -103,55 +95,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-}
-.dashboard-card-content {
-  display: flex;
-  align-items: center; /* Vertically center items */
-  margin-top: 20px;
 }
 
-
-
-.content-right {
-  flex-grow: 1; /* Allows the content area to take up the remaining space */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Aligns text to the left */
-}
-
-.confidence-text {
-  text-align: left; /* Aligns text to the left */
-}
-
-.spinner-container {
-  position: relative; /* Make this the reference for absolute positioning */
-  margin-right: 16px; /* Space between spinner and content */
-}
-
-.percentage-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-40%, -48%);
-  font-weight: bold;
-  color: rgb(110, 95, 95); /* Optional: change color for better visibility */
-}
-
-@media (max-width: 600px) {
-  .mat-grid-list {
-    grid-template-columns: repeat(1, 1fr) !important; /* 1 column for small screens */
-  }
-}
-
-@media (min-width: 601px) and (max-width: 960px) {
-  .mat-grid-list {
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 columns for medium screens */
-  }
-}
-
-@media (min-width: 961px) {
-  .mat-grid-list {
-    grid-template-columns: repeat(4, 1fr) !important; /* 4 columns for larger screens */
-  }
+.drag-over {
+  background-color: #f0f8ff;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #006064;
+  color : #006064;
 }

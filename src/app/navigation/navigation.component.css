@@ -12,17 +12,10 @@
   height: 100%;
 }
 
-.mat-drawer-inner-container {
-  background-color:  white;
-}
-.sidenav {
-  width: 200px;
-}
-
-
-.mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: rgb(39, 84, 182);
+.header {
+  background-color: #e0f7fa !important;
+  color: #006064  !important;
+  display: flex; 
+  align-items: center;
+  flex-direction: column;
 }

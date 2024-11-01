@@ -1,87 +1,62 @@
-<div class="grid-container">
-  <ng-container *ngIf="moderationLabels.length > 0">
-    <mat-grid-list [cols]="cols" rowHeight="200px">
-      <mat-grid-tile [colspan]="1" [rowspan]="1" *ngFor="let label of getFilteredLabels(); let i = index">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              <span class="property">Moderation Label: {{ i + 1}}</span>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <div class="spinner-container">
-              <mat-progress-spinner 
-                mode="determinate" 
-                [value]="label?.Confidence" 
-                [ngClass]="getSpinnerClass(label?.Confidence)"
-                diameter="70">
-              </mat-progress-spinner>
-              <div class="percentage-text">
-                {{ (label?.Confidence).toFixed(0) }}%
-              </div>
-            </div>
-            <div class="content-right">
-              <div class="confidence-text">
-                <div>Inappropriate Content Type: <strong>{{ label?.Name }}</strong></div>
-                <div>Confidence: {{ (label?.Confidence).toFixed(2) }}%</div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
-    
-    
-  </ng-container>
-
-  <mat-grid-list cols="2" rowHeight="700px" rowWidth="200px">
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            <span class="property">Image Upload</span>
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu1" aria-label="Toggle menu">
-              <mat-icon>upload_file</mat-icon>
-            </button>
-            <mat-menu #menu1="matMenu" xPosition="before">
-              <button mat-menu-item (click)="uploadImage()">Upload Image</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content-image">
-          <div style="margin-top: 30px;" *ngIf="imageUrl; else noImage" class="image-container">
-            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image"/>
-            <div class="button-container">
-            </div>
-          </div>
+<div class="container">
+  <div *ngIf="!isImageSafe && moderationLabels.length > 0" class="cards-container">
+    <mat-card *ngFor="let label of getFilteredLabels(); let i = index" class="moderation-card">
+      <mat-card-header>
+        <mat-card-title><span class="header">Moderation Insights</span></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div><span class="key">Prediction Accuracy:</span> {{ label?.Confidence }}</div>
+        <div><span class="key">Identified Category:</span> {{ label?.ParentName }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="left-panel">
+    <mat-card class="upload-card">
+      <mat-card-header class="upload-card-header">
+        <mat-card-title>Upload Image</mat-card-title>
+        <button mat-raised-button class="upload-button" (click)="uploadImage()">Upload Image</button>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <div class="image-container" 
+          (dragover)="onDragOver($event)" 
+          (dragleave)="onDragLeave($event)"
+          (drop)="onFileDropped($event)" 
+          [ngClass]="{'drag-over': isDragOver}" 
+          (click)="fileInput.click()"
+          [ngStyle]="{
+            border: !isProcessingComplete ? '1px dashed #006064' : 'none',
+            cursor: 'pointer'
+          }"
+          >
+          <ng-container *ngIf="imageUrl; else noImage">
+            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image" />
+          </ng-container>
           <ng-template #noImage>
-            <div>No image uploaded.</div>
+            <div>
+              Drag and Drop or Click to Upload
+            </div>
           </ng-template>
-        </mat-card-content>
-        <input type="file" accept="image/jpeg, image/png" (change)="onFileSelected($event)" style="display:none;" #fileInput>
-      </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            <span class="property">Processed Image</span>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content-image">
-          <div style="margin-top: 30px;" *ngIf="isProcessingComplete && imageUrl; else noImageProcessed" class="image-container">
-            <img [src]="imageUrl" [class.blurred]="!isImageSafe" alt="Uploaded Image" class="uploaded-image"/>
-          </div>
-          <ng-template #noImageProcessed>
-            <div><br>No image processed.</div>
-          </ng-template>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-
+        </div>
+      </mat-card-content>
+      <input type="file" accept="image/jpeg, image/png" (change)="onFileSelected($event)" style="display:none;" #fileInput>
+    </mat-card>
+  </div>
+  <div class="right-panel">
+    <mat-card class="processed-card">
+      <mat-card-header>
+        <mat-card-title>Processed Image</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <div *ngIf="isProcessingComplete && imageUrl; else noImageProcessed" class="image-container">
+          <img [src]="imageUrl" [class.blurred]="!isImageSafe" alt="Processed Image" class="uploaded-image"/>
+        </div>
+        <ng-template #noImageProcessed>
+          <div>No image processed.</div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
   <div *ngIf="isLoading" class="loader-overlay">
     <mat-spinner></mat-spinner>
   </div>
-
 </div>
