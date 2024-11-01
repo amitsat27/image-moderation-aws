@@ -10,11 +10,8 @@
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
             <div class="spinner-container">
-              <mat-progress-spinner 
-                mode="determinate" 
-                [value]="label?.Confidence" 
-                [ngClass]="getSpinnerClass(label?.Confidence)"
-                diameter="70">
+              <mat-progress-spinner mode="determinate" [value]="label?.Confidence"
+                [ngClass]="getSpinnerClass(label?.Confidence)" diameter="70">
               </mat-progress-spinner>
               <div class="percentage-text">
                 {{ (label?.Confidence).toFixed(0) }}%
@@ -30,8 +27,6 @@
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
-    
-    
   </ng-container>
 
   <mat-grid-list cols="2" rowHeight="700px" rowWidth="200px">
@@ -40,25 +35,31 @@
         <mat-card-header>
           <mat-card-title>
             <span class="property">Image Upload</span>
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu1" aria-label="Toggle menu">
-              <mat-icon>upload_file</mat-icon>
-            </button>
             <mat-menu #menu1="matMenu" xPosition="before">
               <button mat-menu-item (click)="uploadImage()">Upload Image</button>
             </mat-menu>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content-image">
-          <div style="margin-top: 30px;" *ngIf="imageUrl; else noImage" class="image-container">
-            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image"/>
-            <div class="button-container">
-            </div>
+          <div class="image-container" 
+            (dragover)="onDragOver($event)" 
+            (dragleave)="onDragLeave($event)"
+            (drop)="onFileDropped($event)" 
+            [ngClass]="{'drag-over': isDragOver}" 
+            (click)="fileInput.click()"
+            style="margin-top: 30px; cursor: pointer;">
+            <ng-container *ngIf="imageUrl; else noImage">
+              <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image" />
+            </ng-container>
+            <ng-template #noImage>
+              <div class="upload-text">
+                Drag and Drop or Click to Upload
+              </div>
+            </ng-template>
           </div>
-          <ng-template #noImage>
-            <div>No image uploaded.</div>
-          </ng-template>
         </mat-card-content>
-        <input type="file" accept="image/jpeg, image/png" (change)="onFileSelected($event)" style="display:none;" #fileInput>
+        <input type="file" accept="image/jpeg, image/png" (change)="onFileSelected($event)" style="display:none;"
+          #fileInput>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="1" [rowspan]="1">
@@ -69,8 +70,9 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content-image">
-          <div style="margin-top: 30px;" *ngIf="isProcessingComplete && imageUrl; else noImageProcessed" class="image-container">
-            <img [src]="imageUrl" [class.blurred]="!isImageSafe" alt="Uploaded Image" class="uploaded-image"/>
+          <div style="margin-top: 30px;" *ngIf="isProcessingComplete && imageUrl; else noImageProcessed"
+            class="image-container">
+            <img [src]="imageUrl" [class.blurred]="!isImageSafe" alt="Uploaded Image" class="uploaded-image" />
           </div>
           <ng-template #noImageProcessed>
             <div><br>No image processed.</div>

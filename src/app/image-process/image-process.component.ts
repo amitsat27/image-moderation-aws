@@ -37,6 +37,7 @@ export class ImageProcessComponent {
   private snackBar = inject(MatSnackBar); 
 
   imageUrl: string | ArrayBuffer | null | undefined="";
+  isDragOver = false;
   base64Image: string | null = null;
   isImageSafe: boolean = true;
   fileName: string | null = null; 
@@ -45,6 +46,7 @@ export class ImageProcessComponent {
   isLoading: boolean = false;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
+  
 
   uploadImage() {
     this.fileInput.nativeElement.click();
@@ -59,16 +61,56 @@ export class ImageProcessComponent {
     this.setColsImages();
   }
 
-
+  setColsLabels() {
+    const width = window.innerWidth;
+    if (width < 600) {
+      this.cols = 1; // 1 column for small screens
+    } else if (width < 960) {
+      this.cols = 2; // 2 columns for medium screens
+    } else {
+      this.cols = 4; // 4 columns for larger screens
+    }
+  }
+  setColsImages(){
+    const width = window.innerWidth;
+    if (width < 600) {
+      this.colsImages = 1; // 1 column for small screens
+    } else  {
+      this.colsImages = 2; // 2 columns for medium screens
+    } 
+  }
   showToaster(message: string, panelClass: string) {
     this.snackBar.open(message, 'Close', {
       duration: 3000,
       panelClass: [panelClass]
     });
   }
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver = true;
+  }
 
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver = false;
+  }
+
+  onFileDropped(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver = false;
+    if (event.dataTransfer && event.dataTransfer.files.length) {
+      this.handleFile(event.dataTransfer.files[0]);
+    }
+  }
+  onFileSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length) {
+      this.handleFile(fileInput.files[0]);
+    }
+  }
+
+  handleFile(fileImageInput: File) {
+    const file = fileImageInput;
     if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
       
       const reader = new FileReader();
@@ -118,24 +160,6 @@ export class ImageProcessComponent {
     }
   }
 
-  setColsLabels() {
-    const width = window.innerWidth;
-    if (width < 600) {
-      this.cols = 1; // 1 column for small screens
-    } else if (width < 960) {
-      this.cols = 2; // 2 columns for medium screens
-    } else {
-      this.cols = 4; // 4 columns for larger screens
-    }
-  }
-  setColsImages(){
-    const width = window.innerWidth;
-    if (width < 600) {
-      this.colsImages = 1; // 1 column for small screens
-    } else  {
-      this.colsImages = 2; // 2 columns for medium screens
-    } 
-  }
   getFilteredLabels() {
     return this.moderationLabels.filter(label => label?.ParentName).slice(0, 4);
   }
@@ -150,26 +174,5 @@ export class ImageProcessComponent {
   }
 
   /** Based on the screen size, switch from standard to one column per row */
-  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(({ matches }) => {
-      if (matches) {
-        return [
-          { title: 'Card 1', cols: 2, rows: 1 },
-          { title: 'Card 2', cols: 1, rows: 1 },
-          { title: 'Card 3', cols: 1, rows: 1 },
-          { title: 'Card 4', cols: 1, rows: 1 }
-        ];
-      }
-
-      return [
-        { title: 'Card 1', cols: 1, rows: 2 },
-        { title: 'Card 2', cols: 2, rows: 1 },
-        { title: 'Card 3', cols: 1, rows: 1 },
-        { title: 'Card 4', cols: 1, rows: 1 },
-        { title: 'Card 5', cols: 1, rows: 1 },
-        { title: 'Card 6', cols: 1, rows: 2 },
-        { title: 'Card 7', cols: 1, rows: 1 }
-      ];
-    })
-  );
+  
 }
