@@ -1,0 +1,62 @@
+<div class="container">
+  <div *ngIf="!isImageSafe && moderationLabels.length > 0" class="cards-container">
+    <mat-card *ngFor="let label of getFilteredLabels(); let i = index" class="moderation-card">
+      <mat-card-header>
+        <mat-card-title><span class="header">Moderation Insights</span></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div><span class="key">Prediction Accuracy:</span> {{ label?.Confidence }}</div>
+        <div><span class="key">Identified Category:</span> {{ label?.ParentName }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="left-panel">
+    <mat-card class="upload-card">
+      <mat-card-header class="upload-card-header">
+        <mat-card-title>Upload Image</mat-card-title>
+        <button mat-raised-button class="upload-button" (click)="uploadImage()">Upload Image</button>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <div class="image-container" 
+          (dragover)="onDragOver($event)" 
+          (dragleave)="onDragLeave($event)"
+          (drop)="onFileDropped($event)" 
+          [ngClass]="{'drag-over': isDragOver}" 
+          (click)="fileInput.click()"
+          [ngStyle]="{
+            border: !isProcessingComplete ? '1px dashed #006064' : 'none',
+            cursor: 'pointer'
+          }"
+          >
+          <ng-container *ngIf="imageUrl; else noImage">
+            <img [src]="imageUrl" alt="Uploaded Image" class="uploaded-image" />
+          </ng-container>
+          <ng-template #noImage>
+            <div>
+              Drag and Drop or Click to Upload
+            </div>
+          </ng-template>
+        </div>
+      </mat-card-content>
+      <input type="file" accept="image/jpeg, image/png" (change)="onFileSelected($event)" style="display:none;" #fileInput>
+    </mat-card>
+  </div>
+  <div class="right-panel">
+    <mat-card class="processed-card">
+      <mat-card-header>
+        <mat-card-title>Processed Image</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <div *ngIf="isProcessingComplete && imageUrl; else noImageProcessed" class="image-container">
+          <img [src]="imageUrl" [class.blurred]="!isImageSafe" alt="Processed Image" class="uploaded-image"/>
+        </div>
+        <ng-template #noImageProcessed>
+          <div>No image processed.</div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="isLoading" class="loader-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

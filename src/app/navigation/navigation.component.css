@@ -1,0 +1,21 @@
+
+
+.mat-drawer-content {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  overflow: auto;
+  background-color: white;
+}
+.sidenav-container {
+  height: 100%;
+}
+
+.header {
+  background-color: #e0f7fa !important;
+  color: #006064  !important;
+  display: flex; 
+  align-items: center;
+  flex-direction: column;
+}
